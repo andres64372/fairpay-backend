@@ -1,0 +1,13 @@
+runtime: python38
+
+env_variables:
+  SECRET_KEY: ${SECRET_KEY}
+  DEBUG: False
+  DATABASE_URL: ${DATABASE_URL}
+
+handlers:
+- url: /static
+  static_dir: static/
+
+- url: /.*
+  script: auto
