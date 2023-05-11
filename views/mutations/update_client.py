@@ -28,7 +28,7 @@ class UpdateClientMutation(graphene.Mutation):
     def mutate(cls, root, info, id, name = None, amount = None):
         id = from_global_id(id)
         client = Client.objects.get(pk=id.id)
-        if client.order.user == info.context.user and not client.order.closed:
+        if client.order.user == info.context.user:
             client.name = name if name is not None else client.name
             client.amount = amount if amount is not None else client.amount
             client.save()

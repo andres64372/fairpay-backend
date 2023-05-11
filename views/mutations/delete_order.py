@@ -21,7 +21,7 @@ class DeleteOrderMutation(graphene.Mutation):
     def mutate(cls, root, info, id):
         id = from_global_id(id)
         order = Order.objects.get(pk=id.id)
-        if order.user == info.context.user and not order.closed:
+        if order.user == info.context.user and order.closed:
             order.delete()
             return DeleteOrderMutation(order=DeleteOrderType(status=True))
         else:

@@ -28,15 +28,12 @@ class CreateClientMutation(graphene.Mutation):
     def mutate(cls, root, info, id, name, amount):
         id = from_global_id(id)
         order = Order.objects.get(pk=id.id)
-        if not order.closed:
-            client = Client.objects.create(
-                order=order,
-                name=name,
-                amount=amount,
-            )
-            return CreateClientMutation(client=client)
-        else:
-            raise GraphQLError("Unauthorized")
+        client = Client.objects.create(
+            order=order,
+            name=name,
+            amount=amount,
+        )
+        return CreateClientMutation(client=client)
 
         
         

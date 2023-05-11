@@ -8,7 +8,7 @@ def jwt_authenticate_query(resolve_func):
         if user:
             request.user = user[0]
         else:
-            raise GraphQLError('Unauthorized')
+            raise GraphQLError('Invalid Token')
         return resolve_func(parent, info, **kwargs)
     return wrapper
 
@@ -19,6 +19,6 @@ def jwt_authenticate_mutation(resolve_func):
         if user:
             request.user = user[0]
         else:
-            raise GraphQLError('Unauthorized')
+            raise GraphQLError('Invalid Token')
         return resolve_func(cls, parent, info, **kwargs)
     return wrapper

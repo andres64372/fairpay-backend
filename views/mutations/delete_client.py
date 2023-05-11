@@ -21,7 +21,7 @@ class DeleteClientMutation(graphene.Mutation):
     def mutate(cls, root, info, id):
         id = from_global_id(id)
         client = Client.objects.get(pk=id.id)
-        if client.order.user == info.context.user and not client.order.closed:
+        if client.order.user == info.context.user:
             client.delete()
             return DeleteClientMutation(client=DeleteClientType(status=True))
         else:

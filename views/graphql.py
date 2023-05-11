@@ -25,6 +25,7 @@ class OrderType(DjangoObjectType):
         model = Order
         interfaces = (relay.Node, )
         filter_fields = {
+            'name': ['exact', 'icontains', 'istartswith'],
             'created': ['exact', 'gt', 'gte', 'lt', 'lte'],
             'tip': ['exact', 'gt', 'gte', 'lt', 'lte'],
             'closed': ['exact']
@@ -53,7 +54,7 @@ class Query(graphene.ObjectType):
             raise GraphQLError('Unauthorized')
 
     @jwt_authenticate_query
-    def resolve_all_orders(self, info):
+    def resolve_all_orders(self, info, **kwargs):
         return Order.objects.filter(user=info.context.user)
     
     client = relay.Node.Field(ClientType)

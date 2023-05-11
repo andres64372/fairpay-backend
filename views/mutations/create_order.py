@@ -15,13 +15,14 @@ class OrderType(DjangoObjectType):
 class CreateOrderMutation(graphene.Mutation):
     class Arguments:
         tip = graphene.Int()
+        name = graphene.String()
 
     order = graphene.Field(OrderType)
 
     @classmethod
     @jwt_authenticate_mutation
-    def mutate(cls, root, info, tip = 0):
-        order = Order.objects.create(user=info.context.user, tip=tip)
+    def mutate(cls, root, info, name = '',tip = 0):
+        order = Order.objects.create(user=info.context.user, name=name, tip=tip)
         return CreateOrderMutation(order=order)
         
         

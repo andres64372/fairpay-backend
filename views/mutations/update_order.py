@@ -19,16 +19,18 @@ class UpdateOrderMutation(graphene.Mutation):
     class Arguments:
         id = graphene.ID(required=True)
         tip = graphene.Int()
+        name = graphene.String()
         closed = graphene.Boolean()
 
     order = graphene.Field(OrderType)
 
     @classmethod
     @jwt_authenticate_mutation
-    def mutate(cls, root, info, id, tip = None, closed = None):
+    def mutate(cls, root, info, id, name = None, tip = None, closed = None):
         id = from_global_id(id)
         order = Order.objects.get(pk=id.id)
-        if order.user == info.context.user and not order.closed:
+        if order.user == info.context.user:
+            order.name = name if name is not None else order.name
             order.tip = tip if tip is not None else order.tip
             order.closed = closed if closed is not None else order.closed
             order.save()
