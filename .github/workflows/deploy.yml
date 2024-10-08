@@ -39,7 +39,7 @@ jobs:
       uses: 'google-github-actions/auth@v2'
       with:
         token_format: 'access_token'
-        workload_identity_provider: 'projects/396143431959/locations/global/workloadIdentityPools/github/providers/actions'
+        workload_identity_provider: 'projects/396143431959/locations/global/workloadIdentityPools/actions/providers/github'
         service_account: 'github-actions@fairpay-438003.iam.gserviceaccount.com'
 
     - id: 'deploy'
