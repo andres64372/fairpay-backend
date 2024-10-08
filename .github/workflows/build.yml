@@ -1,0 +1,35 @@
+name: Build
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
+
+    steps:
+    - id: 'checkout'
+      uses: 'actions/checkout@v4'
+
+    - id: 'setup'
+      name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.11
+    
+    - id: 'dependencies'
+      name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+    
+    - id: 'pylint'
+      name: flake8 Lint
+      uses: py-actions/flake8@v2
+      with:
+        exclude: 'migrations,settings.py'
