@@ -8,6 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     defaults:
       run:
         working-directory: ./app
@@ -35,6 +38,7 @@ jobs:
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
       with:
+        token_format: 'access_token'
         workload_identity_provider: 'projects/396143431959/locations/global/workloadIdentityPools/github/providers/actions'
         service_account: 'github-actions@fairpay-438003.iam.gserviceaccount.com'
 
