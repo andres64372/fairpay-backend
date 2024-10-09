@@ -48,7 +48,7 @@ jobs:
     - id: 'setup_database'
       name: Setup Database
       run: |
-        sed -i 's/__database__/$DATABASE_URL/g' app.yaml
+        sed -i "s/__database__/$DATABASE_URL/g" app.yaml
 
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
