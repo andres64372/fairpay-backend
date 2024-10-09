@@ -1,0 +1,66 @@
+name: Deploy to App Engine
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  ENV: dev
+  DATABASE_URL: ${{secrets.DATABASE_URL}}/fairpaydev?sslmode=require
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    defaults:
+      run:
+        working-directory: ./app
+    
+    steps:
+    - id: 'checkout'
+      uses: 'actions/checkout@v4'
+
+    - id: 'setup'
+      name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.11
+    
+    - id: 'dependencies'
+      name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - id: 'static_files'
+      name: Download static files
+      run: |
+        python manage.py collectstatic
+
+    - id: 'migrations'
+      name: Migrate DB
+      run: |
+        echo "DATABASE_URL=$DATABASE_URL" > .env
+        python manage.py migrate
+
+    - id: 'setup_database'
+      name: Setup Database
+      run: |
+        sed -i 's/__database__/$DATABASE_URL/g' app.yaml
+
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        project_id: 'fair-pay-438020'
+        workload_identity_provider: 'projects/396143431959/locations/global/workloadIdentityPools/actions/providers/github'
+        service_account: 'fair-pay-438020@appspot.gserviceaccount.com'
+        token_format: 'access_token'
+
+    - id: 'deploy'
+      uses: 'google-github-actions/deploy-appengine@v2'
+      with:
+        working_directory: ./app
+        version: $ENV
+        promote: false
