@@ -19,21 +19,21 @@ jobs:
     - id: 'checkout'
       uses: 'actions/checkout@v4'
 
-    # - id: 'setup'
-    #   name: Set up Python
-    #   uses: actions/setup-python@v3
-    #   with:
-    #     python-version: 3.11
+    - id: 'setup'
+      name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.11
     
-    # - id: 'dependencies'
-    #   name: Install dependencies
-    #   run: |
-    #     pip install -r requirements.txt
+    - id: 'dependencies'
+      name: Install dependencies
+      run: |
+        pip install -r requirements.txt
 
-    # - id: 'static_files'
-    #   name: Download static files
-    #   run: |
-    #     python manage.py collectstatic
+    - id: 'static_files'
+      name: Download static files
+      run: |
+        python manage.py collectstatic
 
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
@@ -43,9 +43,9 @@ jobs:
         service_account: 'fair-pay-438020@appspot.gserviceaccount.com'
         token_format: 'access_token'
 
-    # - id: 'deploy'
-    #   uses: 'google-github-actions/deploy-appengine@v2'
-    #   with:
-    #     working_directory: ./app
-    #     version: 'dev'
-    #     promote: false
+    - id: 'deploy'
+      uses: 'google-github-actions/deploy-appengine@v2'
+      with:
+        working_directory: ./app
+        version: 'dev'
+        promote: false
