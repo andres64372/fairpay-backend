@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 class Account(models.Model):
     name = models.CharField(max_length=30)
-    user_id = models.CharField(max_length=30)
+    user_id = models.CharField(max_length=60)
 
     def __str__(self) -> str:
         return self.name
