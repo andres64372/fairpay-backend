@@ -59,7 +59,12 @@ class Query(graphene.ObjectType):
     )
 
     @jwt_authenticate_query
-    def resolve_accounts(self, root, info, page: int, per_page: int):
+    def resolve_accounts(
+        root, 
+        info, 
+        page: int, 
+        per_page: int
+    ):
         paginator = Paginator(
             Account.objects.filter(user_id=info.context.user),
             per_page
@@ -72,9 +77,8 @@ class Query(graphene.ObjectType):
 
     @jwt_authenticate_query
     def resolve_account_users(
-        self,
         root,
-        info,
+        _,
         account_id: str,
         page: int,
         per_page: int
@@ -93,7 +97,6 @@ class Query(graphene.ObjectType):
 
     @jwt_authenticate_query
     def resolve_payments(
-        self,
         root,
         _,
         account_id: str,
@@ -114,7 +117,6 @@ class Query(graphene.ObjectType):
 
     @jwt_authenticate_query
     def resolve_user_payments(
-        self,
         root,
         _,
         account_id: str,
