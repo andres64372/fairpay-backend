@@ -1,9 +1,13 @@
 name: Deploy to App Engine
 
 on:
-  pull_request:
+  push:
     branches: [ main ]
   workflow_dispatch:
+
+env:
+  ENV: dev
+  DATABASE_URL: ${{secrets.DATABASE_URL}}/fairpaydev?sslmode=require
 
 jobs:
   deploy:
@@ -35,6 +39,17 @@ jobs:
       run: |
         python manage.py collectstatic
 
+    - id: 'migrations'
+      name: Migrate DB
+      run: |
+        echo "DATABASE_URL=$DATABASE_URL" > .env
+        python manage.py migrate
+
+    - id: 'setup_database'
+      name: Setup Database
+      run: |
+        sed -i 's/__database__/$DATABASE_URL/g' app.yaml
+
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
       with:
@@ -47,5 +62,5 @@ jobs:
       uses: 'google-github-actions/deploy-appengine@v2'
       with:
         working_directory: ./app
-        version: 'dev'
+        version: $ENV
         promote: false

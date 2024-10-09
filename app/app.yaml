@@ -2,6 +2,7 @@ runtime: python311
 
 env_variables:
   DEBUG: False
+  DATABASE_URL: __database__
 
 handlers:
 - url: /static
