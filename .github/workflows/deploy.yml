@@ -62,5 +62,5 @@ jobs:
       uses: 'google-github-actions/deploy-appengine@v2'
       with:
         working_directory: ./app
-        version: $ENV
+        version: ${{env.ENV}}
         promote: false
