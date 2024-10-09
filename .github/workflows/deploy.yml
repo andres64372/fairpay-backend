@@ -40,6 +40,7 @@ jobs:
       with:
         project_id: 'fair-pay-438020'
         workload_identity_provider: 'projects/396143431959/locations/global/workloadIdentityPools/actions/providers/github'
+        service_account: 'fair-pay-438020@appspot.gserviceaccount.com'
 
     - id: 'deploy'
       uses: 'google-github-actions/deploy-appengine@v2'
