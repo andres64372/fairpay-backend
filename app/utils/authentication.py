@@ -46,8 +46,8 @@ class JWT:
             self.__token,
             RSAAlgorithm.from_jwk(rsa_key),
             algorithms=['RS256'],
-            audience=f"https://{settings.AUTH0_DOMAIN}/api/v2/",
-            issuer=f"https://{settings.AUTH0_DOMAIN}/",
+            audience=[f'https://{settings.AUTH0_DOMAIN}/api/v2/', settings.AUTH0_CLIENT],
+            issuer=f'https://{settings.AUTH0_DOMAIN}/',
         )
 
         return payload['sub']

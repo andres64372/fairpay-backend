@@ -150,3 +150,4 @@ GRAPHENE = {
 
 DEFAULT_PAGE_ITEMS = 20
 AUTH0_DOMAIN = "fairpayio.us.auth0.com"
+AUTH0_CLIENT = "PwtNffWuTnZaKI85RkTduzgbyE3Os2kx"
