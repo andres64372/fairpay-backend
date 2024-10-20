@@ -81,10 +81,10 @@ class DeleteAccountUserMutation(graphene.Mutation):
 
     @classmethod
     @jwt_authenticate_mutation
-    def mutate(cls, _, info, account_id):
+    def mutate(cls, _, info, account_user_id):
         try:
             account_user = AccountUser.objects.get(
-                id=int(from_global_id(account_id).id))
+                id=int(from_global_id(account_user_id).id))
         except AccountUser.DoesNotExist:
             raise GraphQLError("User not found")
         if account_user.account.user_id != info.context.user:
