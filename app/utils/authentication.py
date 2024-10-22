@@ -56,12 +56,15 @@ class JWT:
 def jwt_authenticate_query(resolve_func):
     def wrapper(parent, info, **kwargs):
         request = info.context
-        auth = request.META.get('HTTP_AUTHORIZATION')
-        if auth:
-            token = JWT(auth[7:])
-            request.user = token.validate_jwt()
+        if settings.DEBUG:
+            request.user = 'default'
         else:
-            raise GraphQLError('Invalid Token')
+            auth = request.META.get('HTTP_AUTHORIZATION')
+            if auth:
+                token = JWT(auth[7:])
+                request.user = token.validate_jwt()
+            else:
+                raise GraphQLError('Invalid Token')
         return resolve_func(parent, info, **kwargs)
     return wrapper
 
@@ -69,11 +72,15 @@ def jwt_authenticate_query(resolve_func):
 def jwt_authenticate_mutation(resolve_func):
     def wrapper(cls, parent, info, **kwargs):
         request = info.context
-        auth = request.META.get('HTTP_AUTHORIZATION')
-        if auth:
-            token = JWT(auth[7:])
-            request.user = token.validate_jwt()
+        if settings.DEBUG:
+            request.user = 'default'
         else:
-            raise GraphQLError('Invalid Token')
+            auth = request.META.get('HTTP_AUTHORIZATION')
+            if auth:
+                token = JWT(auth[7:])
+                request.user = token.validate_jwt()
+            else:
+                raise GraphQLError('Invalid Token')
+        request.user = 'default'
         return resolve_func(cls, parent, info, **kwargs)
     return wrapper

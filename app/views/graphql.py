@@ -26,9 +26,14 @@ from schemas.payment import (
     PaginatedPaymentType,
     CreatePaymentMutation,
     EditPaymentMutation,
-    DeletePaymentMutation
+    DeletePaymentMutation,
 )
-from schemas.user_payment import PaginatedUserPaymentType
+from schemas.user_payment import (
+    PaginatedUserPaymentType,
+    CreateUserPaymentMutation,
+    EditUserPaymentMutation,
+    DeleteUserPaymentMutation,
+)
 
 from conf import settings
 
@@ -146,6 +151,9 @@ class Mutation(graphene.ObjectType):
     create_payment = CreatePaymentMutation.Field()
     edit_payment = EditPaymentMutation.Field()
     delete_payment = DeletePaymentMutation.Field()
+    create_user_payment = CreateUserPaymentMutation.Field()
+    edit_user_payment = EditUserPaymentMutation.Field()
+    delete_user_payment = DeleteUserPaymentMutation.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

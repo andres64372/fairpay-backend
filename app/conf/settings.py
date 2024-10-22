@@ -45,11 +45,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
     'graphene_django',
     'django_filters',
     'models',
 ]
+
+if not DEBUG: INSTALLED_APPS.append('corsheaders')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -9,6 +9,8 @@ from utils.authentication import jwt_authenticate_mutation
 
 
 class AccountType(DjangoObjectType):
+    total = graphene.Float()
+
     class Meta:
         model = Account
         interfaces = (relay.Node, )
@@ -17,6 +19,8 @@ class AccountType(DjangoObjectType):
             'name': ['exact', 'icontains', 'istartswith'],
         }
 
+    def resolve_total(self, _):
+        return self.total
 
 class PaginatedAccountType(graphene.ObjectType):
     objects = graphene.List(AccountType)
@@ -32,7 +36,7 @@ class CreateAccountMutation(graphene.Mutation):
 
     @classmethod
     @jwt_authenticate_mutation
-    def mutate(cls, root, info, name):
+    def mutate(cls, _, info, name):
         account = Account.objects.create(
             name=name,
             user_id=info.context.user,
@@ -49,7 +53,7 @@ class EditAccountMutation(graphene.Mutation):
 
     @classmethod
     @jwt_authenticate_mutation
-    def mutate(cls, root, info, account_id, name):
+    def mutate(cls, _, info, account_id, name):
         try:
             account = Account.objects.get(
                 id=int(from_global_id(account_id).id))
@@ -70,7 +74,7 @@ class DeleteAccountMutation(graphene.Mutation):
 
     @classmethod
     @jwt_authenticate_mutation
-    def mutate(cls, root, info, account_id):
+    def mutate(cls, _, info, account_id):
         try:
             account = Account.objects.get(
                 id=int(from_global_id(account_id).id))
