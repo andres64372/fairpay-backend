@@ -13,6 +13,8 @@ from utils.authentication import jwt_authenticate_mutation
 
 
 class PaymentType(DjangoObjectType):
+    total = graphene.Float()
+    
     class Meta:
         model = Payment
         interfaces = (relay.Node, )
