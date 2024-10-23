@@ -17,8 +17,6 @@ class PaymentType(DjangoObjectType):
         model = Payment
         interfaces = (relay.Node, )
         fields = (
-            "account_id",
-            "user_id",
             "description",
             "equal_accounts",
             "tax",
@@ -38,7 +36,7 @@ class PaginatedPaymentType(graphene.ObjectType):
 class CreatePaymentMutation(graphene.Mutation):
     class Arguments:
         account_id = graphene.String(required=True)
-        user_id = graphene.String(required=True)
+        account_user_id = graphene.String(required=True)
         description = graphene.String(required=True)
         equal_accounts = graphene.Boolean(required=True)
         tax = graphene.Float(required=True)
