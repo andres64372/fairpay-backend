@@ -17,6 +17,7 @@ class PaymentType(DjangoObjectType):
         model = Payment
         interfaces = (relay.Node, )
         fields = (
+            "account_user__name"
             "description",
             "equal_accounts",
             "tax",
