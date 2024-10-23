@@ -17,7 +17,7 @@ class PaymentType(DjangoObjectType):
         model = Payment
         interfaces = (relay.Node, )
         fields = (
-            "account_user"
+            "account_user",
             "description",
             "equal_accounts",
             "tax",
@@ -26,9 +26,6 @@ class PaymentType(DjangoObjectType):
         filter_fields = {
             'description': ['exact', 'icontains', 'istartswith'],
         }
-
-    def resolve_account_user(self, info):
-        return self.account_user.name
 
 class PaginatedPaymentType(graphene.ObjectType):
     objects = graphene.List(PaymentType)
