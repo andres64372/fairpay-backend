@@ -81,6 +81,5 @@ def jwt_authenticate_mutation(resolve_func):
                 request.user = token.validate_jwt()
             else:
                 raise GraphQLError('Invalid Token')
-        request.user = 'default'
         return resolve_func(cls, parent, info, **kwargs)
     return wrapper
