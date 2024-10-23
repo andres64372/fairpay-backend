@@ -6,9 +6,6 @@ from django.core.exceptions import ValidationError
 class Account(models.Model):
     name = models.CharField(max_length=30)
     user_id = models.CharField(max_length=60)
-
-    def __str__(self) -> str:
-        return self.name
     
     @property
     def total(self):
@@ -17,6 +14,9 @@ class Account(models.Model):
             for payment in Payment.objects.filter(account=self).prefetch_related('userpayment_set')
             for user_payment in payment.userpayment_set.all()
         ])
+    
+    def __str__(self) -> str:
+        return self.name
 
 class AccountUser(models.Model):
     name = models.CharField(max_length=30)

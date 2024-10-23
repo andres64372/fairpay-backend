@@ -26,6 +26,9 @@ class PaymentType(DjangoObjectType):
         filter_fields = {
             'description': ['exact', 'icontains', 'istartswith'],
         }
+    
+    def resolve_total(self, _):
+        return self.total
 
 class PaginatedPaymentType(graphene.ObjectType):
     objects = graphene.List(PaymentType)
