@@ -58,7 +58,7 @@ class Query(graphene.ObjectType):
     )
     user_payments = graphene.Field(
         PaginatedUserPaymentType,
-        account_id=graphene.String(required=True),
+        payment_id=graphene.String(required=True),
         page=graphene.Int(default_value=1),
         per_page=graphene.Int(default_value=settings.DEFAULT_PAGE_ITEMS),
     )

@@ -8,6 +8,7 @@ from models.models import (
     Account,
     AccountUser,
     Payment,
+    UserPayment,
 )
 from utils.authentication import jwt_authenticate_mutation
 
@@ -81,6 +82,15 @@ class CreatePaymentMutation(graphene.Mutation):
             account=account,
             account_user=account_user
         )
+        UserPayment.objects.bulk_create([
+            UserPayment(
+                amount=0,
+                equal_accounts=False,
+                payment=payment,
+                account_user=account_user
+            )
+            for account_user in AccountUser.objects.filter(account=account)
+        ])
         return CreatePaymentMutation(payment=payment)
 
 

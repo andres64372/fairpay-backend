@@ -18,6 +18,7 @@ class UserPaymentType(DjangoObjectType):
         fields = (
             "amount",
             "equal_accounts",
+            "account_user",
         )
 
 
