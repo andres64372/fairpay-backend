@@ -124,13 +124,13 @@ class Query(graphene.ObjectType):
     def resolve_user_payments(
         root,
         _,
-        account_id: str,
+        payment_id: str,
         page: int,
         per_page: int
     ):
         paginator = Paginator(
             UserPayment.objects.filter(
-                payment__pk=int(from_global_id(account_id).id)
+                payment__pk=int(from_global_id(payment_id).id)
             ),
             per_page
         )
