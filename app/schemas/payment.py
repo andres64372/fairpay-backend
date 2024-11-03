@@ -10,12 +10,25 @@ from models.models import (
     Payment,
     UserPayment,
 )
+from schemas.user_payment import UserPaymentType
 from utils.authentication import jwt_authenticate_mutation
 
 
-class PaymentType(DjangoObjectType):
-    total = graphene.Float()
+class PaymentType(DjangoObjectType):    
+    class Meta:
+        model = Payment
+        interfaces = (relay.Node, )
+        fields = (
+            "description",
+            "equal_accounts",
+            "tax",
+            "date"
+        )
     
+class QueryPaymentType(DjangoObjectType):
+    total = graphene.Float()
+    user_payments = graphene.List(UserPaymentType)
+
     class Meta:
         model = Payment
         interfaces = (relay.Node, )
@@ -29,12 +42,15 @@ class PaymentType(DjangoObjectType):
         filter_fields = {
             'description': ['exact', 'icontains', 'istartswith'],
         }
-    
+
     def resolve_total(self, _):
         return self.total
+    
+    def resolve_user_payments(self, _):
+        return UserPayment.objects.filter(payment=self)
 
 class PaginatedPaymentType(graphene.ObjectType):
-    objects = graphene.List(PaymentType)
+    objects = graphene.List(QueryPaymentType)
     total_pages = graphene.Int()
     current_page = graphene.Int()
 
@@ -97,12 +113,13 @@ class CreatePaymentMutation(graphene.Mutation):
 class EditPaymentMutation(graphene.Mutation):
     class Arguments:
         payment_id = graphene.ID(required=True)
+        account_user_id = graphene.String()
         description = graphene.String()
         equal_accounts = graphene.Boolean()
         tax = graphene.Float()
         date = graphene.Date()
 
-    payment = graphene.Field(PaymentType)
+    payment = graphene.Field(QueryPaymentType)
 
     @classmethod
     @jwt_authenticate_mutation
@@ -111,6 +128,7 @@ class EditPaymentMutation(graphene.Mutation):
         _,
         info,
         payment_id,
+        account_user_id,
         description,
         equal_accounts,
         tax,
@@ -142,6 +160,12 @@ class EditPaymentMutation(graphene.Mutation):
             date
             if date is not None
             else payment.date
+        )
+        payment.account_user = (
+            AccountUser.objects.get(
+                id=int(from_global_id(account_user_id).id))
+            if account_user_id is not None
+            else payment.account_user
         )
         payment.save()
         return EditPaymentMutation(payment=payment)
